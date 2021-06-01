@@ -11,16 +11,17 @@ public class VirtualMachine {
     private static final int RAM_SIZE = 32768;
     private static final int REGISTER_COUNT = 8;
 
-    private int[] ram;
-    private int[] registers;
+    private final Memory ram;
+    private final Memory registers;
+    private final OperationLoader operationLoader;
+
     private int programCounter;
-    private OperationLoader operationLoader;
 
     public VirtualMachine() {
-        this.ram = new int[RAM_SIZE];
-        this.registers = new int[REGISTER_COUNT];
-        this.programCounter = 0;
+        this.ram = new Memory(RAM_SIZE);
+        this.registers = new Memory(REGISTER_COUNT);
         this.operationLoader = new OperationLoader(ram, registers);
+        this.programCounter = 0;
     }
 
     public void load(String filename) {
@@ -29,11 +30,10 @@ public class VirtualMachine {
             throw new RuntimeException(filename + " not found");
         }
         try {
-            this.ram = new BlockReader().read(Paths.get(resource.toURI()));
+            ram.load(new BlockReader().read(Paths.get(resource.toURI())));
         } catch (Exception e) {
             throw new RuntimeException("Failure loading memory from " + filename, e);
         }
-        this.operationLoader = new OperationLoader(ram, registers);
     }
 
     public void run() {

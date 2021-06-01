@@ -1,8 +1,10 @@
 package com.elegy.synacor.vm.operations;
 
+import com.elegy.synacor.vm.Memory;
+
 public class Noop extends Operation {
 
-    public Noop(int address, int[] ram, int[] registers) {
+    public Noop(int address, Memory ram, Memory registers) {
         super(address, ram, registers);
     }
 

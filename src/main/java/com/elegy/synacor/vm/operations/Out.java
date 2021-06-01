@@ -1,8 +1,10 @@
 package com.elegy.synacor.vm.operations;
 
+import com.elegy.synacor.vm.Memory;
+
 public class Out extends Operation {
 
-    public Out(int address, int[] ram, int[] registers) {
+    public Out(int address, Memory ram, Memory registers) {
         super(address, ram, registers);
     }
 
