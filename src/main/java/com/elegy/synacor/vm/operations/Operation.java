@@ -2,16 +2,21 @@ package com.elegy.synacor.vm.operations;
 
 import com.elegy.synacor.vm.Memory;
 
+import java.util.Stack;
+
 public abstract class Operation {
 
-    protected final int address;
+    protected Stack<Integer> stack;
+
+    private final int address;
     private final Memory ram;
     private final Memory registers;
 
-    protected Operation(int address, Memory ram, Memory registers) {
+    protected Operation(int address, Memory ram, Memory registers, Stack<Integer> stack) {
         this.address = address;
         this.ram = ram;
         this.registers = registers;
+        this.stack = stack;
     }
 
     public abstract void execute();

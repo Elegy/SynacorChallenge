@@ -5,6 +5,7 @@ import com.elegy.synacor.vm.operations.OperationLoader;
 
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Stack;
 
 public class VirtualMachine {
 
@@ -13,6 +14,7 @@ public class VirtualMachine {
 
     private final Memory ram;
     private final Memory registers;
+    private final Stack<Integer> stack;
     private final OperationLoader operationLoader;
 
     private int programCounter;
@@ -20,7 +22,8 @@ public class VirtualMachine {
     public VirtualMachine() {
         this.ram = new Memory(RAM_SIZE);
         this.registers = new Memory(REGISTER_COUNT);
-        this.operationLoader = new OperationLoader(ram, registers);
+        this.stack = new Stack<>();
+        this.operationLoader = new OperationLoader(ram, registers, stack);
         this.programCounter = 0;
     }
 
@@ -37,11 +40,14 @@ public class VirtualMachine {
     }
 
     public void run() {
-        Operation current = operationLoader.load(programCounter);
-        while (current != null) {
-            current.execute();
-            this.programCounter = current.nextAddress();
-            current = operationLoader.load(programCounter);
+        stack.add(programCounter);
+        while (!stack.isEmpty()) {
+            Operation curr = operationLoader.load(stack.pop());
+            if (curr == null) {
+                return;
+            }
+            stack.push(curr.nextAddress());
+            curr.execute();
         }
     }
 
