@@ -21,6 +21,8 @@ public class OperationLoader {
         switch (opcode) {
             case 0:
                 return null;
+            case 1:
+                return new Set(address, ram, registers, stack);
             case 6:
                 return new Jump(address, ram, registers, stack);
             case 7:

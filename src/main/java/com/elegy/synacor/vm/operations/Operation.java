@@ -38,9 +38,26 @@ public abstract class Operation {
     }
 
     protected final int getValue(int rawValue) {
-        if (rawValue <= Short.MAX_VALUE) {
+        if (!isRegister(rawValue)) {
             return rawValue;
         }
-        return registers.read(rawValue - Short.MAX_VALUE - 1);
+        return registers.read(getRegisterAddress(rawValue));
+    }
+
+    protected final void setValue(int rawAddress, int rawValue) {
+        if (isRegister(rawAddress)) {
+            int address = getRegisterAddress(rawAddress);
+            registers.write(address, getValue(rawValue));
+        } else {
+            ram.write(rawAddress, getValue(rawValue));
+        }
+    }
+
+    private boolean isRegister(int rawValue) {
+        return rawValue > Short.MAX_VALUE;
+    }
+
+    private int getRegisterAddress(int rawAddress) {
+        return rawAddress - Short.MAX_VALUE - 1;
     }
 }
