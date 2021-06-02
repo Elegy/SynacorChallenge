@@ -21,7 +21,7 @@ public class JumpFalse extends Operation {
 
     @Override
     public String opCode() {
-        return "jt";
+        return "jf";
     }
 
     @Override
