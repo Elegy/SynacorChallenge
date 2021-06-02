@@ -41,6 +41,6 @@ public abstract class Operation {
         if (rawValue <= Short.MAX_VALUE) {
             return rawValue;
         }
-        return registers.read(rawValue - Short.MAX_VALUE);
+        return registers.read(rawValue - Short.MAX_VALUE - 1);
     }
 }
