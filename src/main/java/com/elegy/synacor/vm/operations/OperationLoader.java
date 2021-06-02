@@ -23,6 +23,10 @@ public class OperationLoader {
                 return null;
             case 6:
                 return new Jump(address, ram, registers, stack);
+            case 7:
+                return new JumpTrue(address, ram, registers, stack);
+            case 8:
+                return new JumpFalse(address, ram, registers, stack);
             case 19:
                 return new Out(address, ram, registers, stack);
             case 21:
