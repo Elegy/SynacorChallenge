@@ -1,13 +1,11 @@
 package com.elegy.synacor.vm.operations;
 
-import com.elegy.synacor.vm.Memory;
-
-import java.util.Stack;
+import com.elegy.synacor.vm.VirtualMachine;
 
 public class Out extends Operation {
 
-    public Out(int address, Memory ram, Memory registers, Stack<Integer> stack) {
-        super(address, ram, registers, stack);
+    public Out(int address, VirtualMachine vm) {
+        super(address, vm);
     }
 
     @Override

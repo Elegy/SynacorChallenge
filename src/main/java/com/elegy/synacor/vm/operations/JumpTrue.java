@@ -1,13 +1,11 @@
 package com.elegy.synacor.vm.operations;
 
-import com.elegy.synacor.vm.Memory;
-
-import java.util.Stack;
+import com.elegy.synacor.vm.VirtualMachine;
 
 public class JumpTrue extends Operation {
 
-    public JumpTrue(int address, Memory ram, Memory registers, Stack<Integer> stack) {
-        super(address, ram, registers, stack);
+    public JumpTrue(int address, VirtualMachine vm) {
+        super(address, vm);
     }
 
     @Override
@@ -15,7 +13,7 @@ public class JumpTrue extends Operation {
         int condition = getValue(first());
         if (condition != 0) {
             int jumpAddress = getValue(second());
-            stack.push(jumpAddress);
+            vm.jump(jumpAddress);
         }
     }
 

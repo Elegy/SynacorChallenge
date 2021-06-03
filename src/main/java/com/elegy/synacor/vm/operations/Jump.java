@@ -1,19 +1,17 @@
 package com.elegy.synacor.vm.operations;
 
-import com.elegy.synacor.vm.Memory;
-
-import java.util.Stack;
+import com.elegy.synacor.vm.VirtualMachine;
 
 public class Jump extends Operation {
 
-    public Jump(int address, Memory ram, Memory registers, Stack<Integer> stack) {
-        super(address, ram, registers, stack);
+    public Jump(int address, VirtualMachine vm) {
+        super(address, vm);
     }
 
     @Override
     public void execute() {
         int jumpAddress = getValue(first());
-        stack.push(jumpAddress);
+        vm.jump(jumpAddress);
     }
 
     @Override

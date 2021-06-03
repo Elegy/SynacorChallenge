@@ -1,7 +1,6 @@
 package com.elegy.synacor.vm;
 
-import com.elegy.synacor.vm.operations.Operation;
-import com.elegy.synacor.vm.operations.OperationLoader;
+import com.elegy.synacor.vm.operations.*;
 
 import java.net.URL;
 import java.nio.file.Paths;
@@ -14,20 +13,32 @@ public class VirtualMachine {
 
     private final Memory ram;
     private final Memory registers;
-    private final Stack<Integer> stack;
-    private final OperationLoader operationLoader;
-
-    private int programCounter;
+    private final Stack<Operation> stack;
 
     public VirtualMachine() {
         this.ram = new Memory(RAM_SIZE);
         this.registers = new Memory(REGISTER_COUNT);
         this.stack = new Stack<>();
-        this.operationLoader = new OperationLoader(ram, registers, stack);
-        this.programCounter = 0;
     }
 
-    public void load(String filename) {
+    public Memory getRam() {
+        return ram;
+    }
+
+    public Memory getRegisters() {
+        return registers;
+    }
+
+    public void run() {
+        stack.add(loadOperation(0));
+        while (!stack.isEmpty() && stack.peek() != null) {
+            Operation curr = stack.pop();
+            stack.push(loadOperation(curr.nextAddress()));
+            curr.execute();
+        }
+    }
+
+    public void loadProgram(String filename) {
         URL resource = getClass().getClassLoader().getResource(filename);
         if (resource == null) {
             throw new RuntimeException(filename + " not found");
@@ -39,21 +50,36 @@ public class VirtualMachine {
         }
     }
 
-    public void run() {
-        stack.add(programCounter);
-        while (!stack.isEmpty()) {
-            Operation curr = operationLoader.load(stack.pop());
-            if (curr == null) {
-                return;
-            }
-            stack.push(curr.nextAddress());
-            curr.execute();
+    public void jump(int address) {
+        stack.push(loadOperation(address));
+    }
+
+    private Operation loadOperation(int address) {
+        int opcode = ram.read(address);
+        switch (opcode) {
+            case 0:
+                return null;
+            case 1:
+                return new Set(address, this);
+            case 6:
+                return new Jump(address, this);
+            case 7:
+                return new JumpTrue(address, this);
+            case 8:
+                return new JumpFalse(address, this);
+            case 19:
+                return new Out(address, this);
+            case 21:
+                return new Noop(address, this);
+            default:
+                System.out.println("Unsupported operation with opcode " + opcode);
+                return null;
         }
     }
 
     public static void main(String[] args) {
         VirtualMachine vm = new VirtualMachine();
-        vm.load("challenge.bin");
+        vm.loadProgram("challenge.bin");
         vm.run();
     }
 }

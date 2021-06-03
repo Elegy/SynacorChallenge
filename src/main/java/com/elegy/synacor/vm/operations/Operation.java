@@ -1,22 +1,16 @@
 package com.elegy.synacor.vm.operations;
 
-import com.elegy.synacor.vm.Memory;
-
-import java.util.Stack;
+import com.elegy.synacor.vm.VirtualMachine;
 
 public abstract class Operation {
 
-    protected Stack<Integer> stack;
+    protected final VirtualMachine vm;
 
     private final int address;
-    private final Memory ram;
-    private final Memory registers;
 
-    protected Operation(int address, Memory ram, Memory registers, Stack<Integer> stack) {
+    protected Operation(int address, VirtualMachine vm) {
         this.address = address;
-        this.ram = ram;
-        this.registers = registers;
-        this.stack = stack;
+        this.vm = vm;
     }
 
     public abstract void execute();
@@ -30,26 +24,26 @@ public abstract class Operation {
     }
 
     protected final int first() {
-        return ram.read(address + 1);
+        return vm.getRam().read(address + 1);
     }
 
     protected final int second() {
-        return ram.read(address + 2);
+        return vm.getRam().read(address + 2);
     }
 
     protected final int getValue(int rawValue) {
         if (!isRegister(rawValue)) {
             return rawValue;
         }
-        return registers.read(getRegisterAddress(rawValue));
+        return vm.getRegisters().read(getRegisterAddress(rawValue));
     }
 
     protected final void setValue(int rawAddress, int rawValue) {
         if (isRegister(rawAddress)) {
             int address = getRegisterAddress(rawAddress);
-            registers.write(address, getValue(rawValue));
+            vm.getRegisters().write(address, getValue(rawValue));
         } else {
-            ram.write(rawAddress, getValue(rawValue));
+            vm.getRam().write(rawAddress, getValue(rawValue));
         }
     }
 
