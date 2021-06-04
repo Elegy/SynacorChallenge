@@ -32,6 +32,10 @@ public class VirtualMachine {
         return registers;
     }
 
+    public Stack<Integer> getStack() {
+        return stack;
+    }
+
     public void run() {
         Operation curr = loadOperation(instructionPointer);
         while (curr != null) {
@@ -65,6 +69,8 @@ public class VirtualMachine {
                 return null;
             case 1:
                 return new Set(address, this);
+            case 2:
+                return new Push(address, this);
             case 4:
                 return new Equal(address, this);
             case 6:
