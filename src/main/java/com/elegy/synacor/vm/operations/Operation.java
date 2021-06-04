@@ -31,6 +31,10 @@ public abstract class Operation {
         return vm.getRam().read(address + 2);
     }
 
+    protected final int third() {
+        return vm.getRam().read(address + 3);
+    }
+
     protected final int getValue(int rawValue) {
         if (!isRegister(rawValue)) {
             return rawValue;

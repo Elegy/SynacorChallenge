@@ -38,6 +38,10 @@ public class VirtualMachine {
         }
     }
 
+    public void jump(int address) {
+        stack.push(loadOperation(address));
+    }
+
     public void loadProgram(String filename) {
         URL resource = getClass().getClassLoader().getResource(filename);
         if (resource == null) {
@@ -48,10 +52,6 @@ public class VirtualMachine {
         } catch (Exception e) {
             throw new RuntimeException("Failure loading memory from " + filename, e);
         }
-    }
-
-    public void jump(int address) {
-        stack.push(loadOperation(address));
     }
 
     private Operation loadOperation(int address) {
@@ -67,6 +67,8 @@ public class VirtualMachine {
                 return new JumpTrue(address, this);
             case 8:
                 return new JumpFalse(address, this);
+            case 9:
+                return new Add(address, this);
             case 19:
                 return new Out(address, this);
             case 21:
