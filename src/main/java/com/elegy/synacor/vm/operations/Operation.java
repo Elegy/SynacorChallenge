@@ -28,6 +28,20 @@ public abstract class Operation {
         return address + 1 + numArgs();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        sb.append(address);
+        sb.append("]: ");
+        sb.append(opCode());
+        for (int i = 0; i < numArgs(); ++i) {
+            sb.append(" ");
+            sb.append(args[0]);
+        }
+        return sb.toString();
+    }
+
     protected final int getValue(int rawValue) {
         if (!isRegister(rawValue)) {
             return rawValue;
