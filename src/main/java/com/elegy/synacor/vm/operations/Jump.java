@@ -10,7 +10,7 @@ public class Jump extends Operation {
 
     @Override
     public void execute() {
-        int jumpAddress = getValue(first());
+        int jumpAddress = getValue(args[0]);
         vm.jump(jumpAddress);
     }
 

@@ -10,10 +10,11 @@ public class Add extends Operation {
 
     @Override
     public void execute() {
-        int b = getValue(second());
-        int c = getValue(third());
+        int b = getValue(args[1]);
+        int c = getValue(args[2]);
+
         int result = (b + c) % (Short.MAX_VALUE + 1);
-        setValue(first(), result);
+        setValue(args[0], result);
     }
 
     @Override

@@ -5,12 +5,17 @@ import com.elegy.synacor.vm.VirtualMachine;
 public abstract class Operation {
 
     protected final VirtualMachine vm;
+    protected final int[] args;
 
     private final int address;
 
     protected Operation(int address, VirtualMachine vm) {
         this.address = address;
         this.vm = vm;
+        this.args = new int[numArgs()];
+        for (int i = 0; i < numArgs(); ++i) {
+            this.args[i] = vm.getRam().read(address + i + 1);
+        }
     }
 
     public abstract void execute();
@@ -21,18 +26,6 @@ public abstract class Operation {
 
     public final int nextAddress() {
         return address + 1 + numArgs();
-    }
-
-    protected final int first() {
-        return vm.getRam().read(address + 1);
-    }
-
-    protected final int second() {
-        return vm.getRam().read(address + 2);
-    }
-
-    protected final int third() {
-        return vm.getRam().read(address + 3);
     }
 
     protected final int getValue(int rawValue) {

@@ -10,7 +10,7 @@ public class Set extends Operation {
 
     @Override
     public void execute() {
-        setValue(first(), second());
+        setValue(args[0], args[1]);
     }
 
     @Override

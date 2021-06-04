@@ -10,9 +10,9 @@ public class JumpFalse extends Operation {
 
     @Override
     public void execute() {
-        int condition = getValue(first());
+        int condition = getValue(args[0]);
         if (condition == 0) {
-            int jumpAddress = getValue(second());
+            int jumpAddress = getValue(args[1]);
             vm.jump(jumpAddress);
         }
     }
