@@ -10,7 +10,7 @@ public class Out extends Operation {
 
     @Override
     public void execute() {
-        System.out.print((char) getValue(args[0]));
+        vm.print((char) getValue(args[0]));
     }
 
     @Override

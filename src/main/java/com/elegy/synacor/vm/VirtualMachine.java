@@ -16,11 +16,13 @@ public class VirtualMachine {
     private final Stack<Integer> stack;
 
     private int instructionPointer;
+    private StringBuilder outputBuffer;
 
     public VirtualMachine() {
         this.ram = new Memory(RAM_SIZE);
         this.registers = new Memory(REGISTER_COUNT);
         this.stack = new Stack<>();
+        this.outputBuffer = new StringBuilder();
         this.instructionPointer = 0;
     }
 
@@ -60,6 +62,16 @@ public class VirtualMachine {
             address = stack.pop();
         }
         jump(address);
+    }
+
+    public void print(char c) {
+        outputBuffer.append(c);
+    }
+
+    public String getOutput() {
+        String result = outputBuffer.toString();
+        outputBuffer = new StringBuilder();
+        return result;
     }
 
     public void loadProgram(String filename) {
@@ -126,11 +138,5 @@ public class VirtualMachine {
                 System.out.println("Unsupported operation with opcode " + opcode);
                 return null;
         }
-    }
-
-    public static void main(String[] args) {
-        VirtualMachine vm = new VirtualMachine();
-        vm.loadProgram("challenge.bin");
-        vm.run();
     }
 }
