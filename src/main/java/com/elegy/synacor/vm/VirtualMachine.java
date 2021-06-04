@@ -61,6 +61,8 @@ public class VirtualMachine {
                 return null;
             case 1:
                 return new Set(address, this);
+            case 4:
+                return new Equal(address, this);
             case 6:
                 return new Jump(address, this);
             case 7:
