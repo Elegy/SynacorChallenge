@@ -6,8 +6,7 @@ public abstract class Operation {
 
     protected final VirtualMachine vm;
     protected final int[] args;
-
-    private final int address;
+    protected final int address;
 
     protected Operation(int address, VirtualMachine vm) {
         this.address = address;

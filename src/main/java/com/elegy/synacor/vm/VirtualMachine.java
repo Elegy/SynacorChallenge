@@ -4,6 +4,8 @@ import com.elegy.synacor.vm.operations.*;
 
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class VirtualMachine {
@@ -14,8 +16,11 @@ public class VirtualMachine {
     private final Memory ram;
     private final Memory registers;
     private final Stack<Integer> stack;
+    private final Queue<Character> inputBuffer;
 
     private int instructionPointer;
+    private boolean blocked;
+    private boolean done;
     private StringBuilder outputBuffer;
 
     public VirtualMachine() {
@@ -24,6 +29,8 @@ public class VirtualMachine {
         this.stack = new Stack<>();
         this.outputBuffer = new StringBuilder();
         this.instructionPointer = 0;
+        this.inputBuffer = new LinkedList<>();
+        this.blocked = false;
     }
 
     public Memory getRam() {
@@ -40,10 +47,14 @@ public class VirtualMachine {
 
     public void run() {
         Operation curr = loadOperation(instructionPointer);
-        while (curr != null) {
-            instructionPointer = curr.nextAddress();
-            curr.execute();
-            curr = loadOperation(instructionPointer);
+        while (!blocked && !done) {
+            if (curr == null) {
+                done = true;
+            } else {
+                instructionPointer = curr.nextAddress();
+                curr.execute();
+                curr = loadOperation(instructionPointer);
+            }
         }
     }
 
@@ -68,10 +79,34 @@ public class VirtualMachine {
         outputBuffer.append(c);
     }
 
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    public boolean isDone() {
+        return blocked;
+    }
+
     public String getOutput() {
         String result = outputBuffer.toString();
         outputBuffer = new StringBuilder();
         return result;
+    }
+
+    public void parseInput(String input) {
+        for (char c : input.toCharArray()) {
+            inputBuffer.add(c);
+        }
+        inputBuffer.add('\n');
+        blocked = false;
+    }
+
+    public boolean hasInput() {
+        return !inputBuffer.isEmpty();
+    }
+
+    public char readNextInput() {
+        return inputBuffer.poll();
     }
 
     public void loadProgram(String filename) {
@@ -132,11 +167,12 @@ public class VirtualMachine {
                 return new Return(address, this);
             case 19:
                 return new Out(address, this);
+            case 20:
+                return new In(address, this);
             case 21:
                 return new Noop(address, this);
             default:
-                System.out.println("Unsupported operation with opcode " + opcode);
-                return null;
+                throw new RuntimeException("Unsupported operation with opcode " + opcode);
         }
     }
 }
