@@ -99,6 +99,10 @@ public class VirtualMachine {
                 return new Or(address, this);
             case 14:
                 return new Not(address, this);
+            case 15:
+                return new ReadMemory(address, this);
+            case 16:
+                return new WriteMemory(address, this);
             case 17:
                 return new Call(address, this);
             case 19:
