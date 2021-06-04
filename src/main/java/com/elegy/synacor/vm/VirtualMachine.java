@@ -46,8 +46,12 @@ public class VirtualMachine {
     }
 
     public void jump(int address) {
-        stack.push(instructionPointer);
         instructionPointer = address;
+    }
+
+    public void call(int address) {
+        stack.push(instructionPointer);
+        jump(address);
     }
 
     public void loadProgram(String filename) {
@@ -91,6 +95,8 @@ public class VirtualMachine {
                 return new Or(address, this);
             case 14:
                 return new Not(address, this);
+            case 17:
+                return new Call(address, this);
             case 19:
                 return new Out(address, this);
             case 21:
