@@ -54,6 +54,14 @@ public class VirtualMachine {
         jump(address);
     }
 
+    public void ret() {
+        int address = -1;
+        if (!stack.isEmpty()) {
+            address = stack.pop();
+        }
+        jump(address);
+    }
+
     public void loadProgram(String filename) {
         URL resource = getClass().getClassLoader().getResource(filename);
         if (resource == null) {
@@ -67,6 +75,9 @@ public class VirtualMachine {
     }
 
     private Operation loadOperation(int address) {
+        if (address < 0 || address >= RAM_SIZE) {
+            return null;
+        }
         int opcode = ram.read(address);
         switch (opcode) {
             case 0:
@@ -105,6 +116,8 @@ public class VirtualMachine {
                 return new WriteMemory(address, this);
             case 17:
                 return new Call(address, this);
+            case 18:
+                return new Return(address, this);
             case 19:
                 return new Out(address, this);
             case 21:
