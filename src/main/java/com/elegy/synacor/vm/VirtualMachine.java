@@ -40,6 +40,7 @@ public class VirtualMachine {
         Operation curr = loadOperation(instructionPointer);
         while (curr != null) {
             instructionPointer = curr.nextAddress();
+            System.out.println(curr);
             curr.execute();
             curr = loadOperation(instructionPointer);
         }
@@ -71,6 +72,8 @@ public class VirtualMachine {
                 return new Set(address, this);
             case 2:
                 return new Push(address, this);
+            case 3:
+                return new Pop(address, this);
             case 4:
                 return new Equal(address, this);
             case 6:
