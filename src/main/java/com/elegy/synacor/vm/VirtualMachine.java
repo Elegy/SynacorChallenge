@@ -13,12 +13,15 @@ public class VirtualMachine {
 
     private final Memory ram;
     private final Memory registers;
-    private final Stack<Operation> stack;
+    private final Stack<Integer> stack;
+
+    private int instructionPointer;
 
     public VirtualMachine() {
         this.ram = new Memory(RAM_SIZE);
         this.registers = new Memory(REGISTER_COUNT);
         this.stack = new Stack<>();
+        this.instructionPointer = 0;
     }
 
     public Memory getRam() {
@@ -30,16 +33,17 @@ public class VirtualMachine {
     }
 
     public void run() {
-        stack.add(loadOperation(0));
-        while (!stack.isEmpty() && stack.peek() != null) {
-            Operation curr = stack.pop();
-            stack.push(loadOperation(curr.nextAddress()));
+        Operation curr = loadOperation(instructionPointer);
+        while (curr != null) {
+            instructionPointer = curr.nextAddress();
             curr.execute();
+            curr = loadOperation(instructionPointer);
         }
     }
 
     public void jump(int address) {
-        stack.push(loadOperation(address));
+        stack.push(instructionPointer);
+        instructionPointer = address;
     }
 
     public void loadProgram(String filename) {
