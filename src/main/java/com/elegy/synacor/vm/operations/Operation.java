@@ -37,7 +37,7 @@ public abstract class Operation {
         sb.append(opCode());
         for (int i = 0; i < numArgs(); ++i) {
             sb.append(" ");
-            sb.append(args[0]);
+            sb.append(args[i]);
         }
         return sb.toString();
     }
