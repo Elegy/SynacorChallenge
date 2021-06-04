@@ -89,6 +89,10 @@ public class VirtualMachine {
                 return new JumpFalse(address, this);
             case 9:
                 return new Add(address, this);
+            case 10:
+                return new Multiply(address, this);
+            case 11:
+                return new Modulo(address, this);
             case 12:
                 return new And(address, this);
             case 13:
