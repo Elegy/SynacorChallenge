@@ -89,6 +89,8 @@ public class VirtualMachine {
                 return new And(address, this);
             case 13:
                 return new Or(address, this);
+            case 14:
+                return new Not(address, this);
             case 19:
                 return new Out(address, this);
             case 21:
