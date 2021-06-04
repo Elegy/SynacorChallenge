@@ -2,9 +2,9 @@ package com.elegy.synacor.vm.operations;
 
 import com.elegy.synacor.vm.VirtualMachine;
 
-public class GreaterThan extends Operation {
+public class And extends Operation {
 
-    public GreaterThan(int address, VirtualMachine vm) {
+    public And(int address, VirtualMachine vm) {
         super(address, vm);
     }
 
@@ -12,14 +12,12 @@ public class GreaterThan extends Operation {
     public void execute() {
         int b = getValue(args[1]);
         int c = getValue(args[2]);
-
-        int result = (b > c) ? 1 : 0;
-        setValue(args[0], result);
+        setValue(args[0], b & c);
     }
 
     @Override
     public String opCode() {
-        return "gt";
+        return "and";
     }
 
     @Override
