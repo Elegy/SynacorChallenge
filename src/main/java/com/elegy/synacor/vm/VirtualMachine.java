@@ -84,7 +84,7 @@ public class VirtualMachine {
     }
 
     public boolean isDone() {
-        return blocked;
+        return !blocked;
     }
 
     public String getOutput() {
